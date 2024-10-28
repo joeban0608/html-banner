@@ -1,0 +1,143 @@
+<style>
+  /* 設置輪播容器的樣式 */
+  .carousel-container {
+    position: relative;
+    width: 80%;
+    height: 36vh;
+    margin: auto;
+    overflow: hidden;
+    border-radius: 10px;
+  }
+
+  /* 單個幻燈片的樣式 */
+  .carousel-slide {
+    display: none;
+    width: 100%;
+    height: 100%;
+    transition: opacity 0.5s ease;
+  }
+
+  /* 當前顯示的幻燈片 */
+  .carousel-slide.active {
+    display: block;
+  }
+
+  /* 單個幻燈片的圖片樣式 */
+  .carousel-slide img {
+    width: 100%;
+    height: 100%;
+  }
+
+  /* 左右切換按鈕 */
+  .carousel-btn {
+    position: absolute;
+    top: 50%;
+    width: 50px;
+    height: 50px;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* 左右按鈕位置 */
+  .carousel-btn.left {
+    left: 10px;
+  }
+
+  .carousel-btn.right {
+    right: 10px;
+  }
+
+  /* 指示點 */
+  .carousel-dots {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+  }
+
+  .carousel-dot {
+    width: 10px;
+    height: 10px;
+    margin: 0 5px;
+    background-color: lightgray;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+
+  .carousel-dot.active {
+    background-color: gray;
+  }
+</style>
+
+<div class="carousel-container">
+  <div class="carousel-slide active">
+    <img src="./assets/photo-1.webp" alt="Slide 1" />
+  </div>
+  <div class="carousel-slide">
+    <img src="./assets/photo-2.webp" alt="Slide 2" />
+  </div>
+  <div class="carousel-slide">
+    <img src="./assets/photo-3.webp" alt="Slide3" />
+  </div>
+
+  <!-- 左右切換按鈕 -->
+  <button class="carousel-btn left" onclick="prevSlide()">&#10094;</button>
+  <button class="carousel-btn right" onclick="nextSlide()">&#10095;</button>
+</div>
+
+<!-- 指示點容器 -->
+<div class="carousel-dots"></div>
+
+<script>
+  const CAROUSEL_TIME = 3000; // 毫秒
+  let currentIndex = 0;
+  const slides = document.querySelectorAll(".carousel-slide");
+  const dotsContainer = document.querySelector(".carousel-dots");
+
+  // 根據幻燈片數量創建指示點
+  slides.forEach((_, index) => {
+    const dot = document.createElement("div");
+    dot.classList.add("carousel-dot");
+    if (index === 0) dot.classList.add("active"); // 初始激活狀態
+    dot.onclick = () => currentSlide(index); // 點擊事件
+    dotsContainer.appendChild(dot);
+  });
+
+  const dots = document.querySelectorAll(".carousel-dot");
+
+  // 顯示當前的幻燈片
+  function showSlide(index) {
+    slides.forEach((slide, i) => {
+      slide.classList.toggle("active", i === index);
+      dots[i].classList.toggle("active", i === index);
+    });
+    currentIndex = index;
+  }
+
+  // 下一張幻燈片
+  function nextSlide() {
+    const nextIndex = (currentIndex + 1) % slides.length;
+    showSlide(nextIndex);
+  }
+
+  // 上一張幻燈片
+  function prevSlide() {
+    const prevIndex = (currentIndex - 1 + slides.length) % slides.length;
+    showSlide(prevIndex);
+  }
+
+  // 點擊指示點跳到指定幻燈片
+  function currentSlide(index) {
+    showSlide(index);
+  }
+
+  // 自動播放功能
+  setInterval(nextSlide, CAROUSEL_TIME); // 每3秒自動切換
+</script>
